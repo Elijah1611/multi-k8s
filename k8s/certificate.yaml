@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: scotty-design-tls
+spec:
+  secretName: scotty-design
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: scotty.design
+  dnsNames:
+    - scotty.design
+    - www.scotty.design
+  acme:
+    config:
+      - http01:
+          ingressClass: nginx
+        domains:
+          - scotty.design
+          - www.scotty.design
