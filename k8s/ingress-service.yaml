@@ -15,7 +15,7 @@ spec:
       secretName: scotty-design
   rules:
     - host: scotty.design
-    - http:
+      http:
         paths:
           - path: /?(.*)
             backend:
@@ -25,8 +25,8 @@ spec:
             backend:
               serviceName: server-cluster-ip-service
               servicePort: 5000
-    - host: www.scotty.design
-    - http:
+    - host: scotty.design
+      http:
         paths:
           - path: /?(.*)
             backend:
