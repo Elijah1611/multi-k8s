@@ -1,0 +1,48 @@
+apiVersion: skaffold/v2alpha4
+kind: Config
+metadata:
+  name: complex
+build:
+  local:
+    push: false
+  artifacts:
+    - image: lijahthedev/multi-client
+      context: client
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        infer:
+          - "**/*.js"
+          - "**/*.css"
+          - "**/*.html"
+    - image: lijahthedev/multi-server
+      context: server
+      docker:
+        dockerfile: Dockerfile.dev
+    - image: lijahthedev/multi-worker
+      context: worker
+      docker:
+        dockerfile: Dockerfile.dev
+deploy:
+  kubectl:
+    manifests:
+      - k8s/client-deployment.yaml
+      - k8s/server-deployment.yaml
+      - k8s/database-persistent-volume-claim.yaml
+      - k8s/ingress-service.yaml
+      - k8s/postgres-cluster-ip-service.yaml
+      - k8s/postgres-deployment.yaml
+      - k8s/redis-cluster-ip-service.yaml
+      - k8s/redis-deployment.yaml
+      - k8s/worker-deployment.yaml
+      - k8s/server-cluster-ip-service.yaml
+      - k8s/client-cluster-ip-service.yaml
+portForward:
+  - resourceType: service
+    resourceName: client-cluster-ip-service
+    port: 3000
+    localPort: 3000
+  - resourceType: service
+    resourceName: server-cluster-ip-service
+    port: 5000
+    localPort: 5000
